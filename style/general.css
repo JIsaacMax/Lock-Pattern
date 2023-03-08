@@ -1,0 +1,40 @@
+*{
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+
+body{
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    display: grid;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    align-content: center;
+}
+
+#contentArea{
+    display: grid;
+    align-self: center;
+}
+
+.points{
+    width: calc(100%-16vw);
+    height: 40vh;
+    background-color: chocolate;
+    align-self: center;
+}
+
+.point{
+    display: flex;
+    width: 80px;
+    height: 80px;
+    background-color: brown;
+    border-radius: 100%;
+}
+
+.glow{
+
+}
