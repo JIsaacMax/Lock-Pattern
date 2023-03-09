@@ -1,3 +1,20 @@
+function l(v){
+    return console.log(v)
+}
+
+function one(c){
+    return document.querySelector("." + c)
+}
+
+function many(c){
+    return document.querySelectorAll("." + c)
+}
+
+function id(id){
+    return document.getElementById(id)
+}
+
+
 var p1 = document.getElementById("point-1")
 var p2 = document.getElementById("point-2")
 var p3 = document.getElementById("point-3")
@@ -9,9 +26,29 @@ var p8 = document.getElementById("point-8")
 var p9 = document.getElementById("point-9")
 
 var contentArea = document.getElementById("contentArea"),
-    overFlowGuarantee = document.querySelector("body")
+    overFlowGuarantee = document.querySelector("body"),
+    defaultC = "grey",
+    glowC = "white",
+    currentPW;
+    passwordCode = [];
 
-    contentArea.addEventListener("mousedown", function(e){
+    contentArea.addEventListener("mousedown", enablePattern)
+
+
+// contentArea.addEventListener("mouseup", disablePattern)
+
+overFlowGuarantee.addEventListener("mouseup", disablePattern)
+
+var glowPattern = function(){
+    if(this.getAttribute("stroke") != glowC){
+    passwordCode.push(parseInt(this.getAttribute("value")));
+    l(passwordCode);
+    }
+    this.setAttribute("stroke", glowC);
+}
+
+//Habilita o padrão
+function enablePattern(){
     p1.addEventListener("mouseenter", glowPattern)
     p2.addEventListener("mouseenter", glowPattern)
     p3.addEventListener("mouseenter", glowPattern)
@@ -21,53 +58,46 @@ var contentArea = document.getElementById("contentArea"),
     p7.addEventListener("mouseenter", glowPattern)
     p8.addEventListener("mouseenter", glowPattern)
     p9.addEventListener("mouseenter", glowPattern)
-})
-
-
-// contentArea.addEventListener("mouseup", function(){
-//     clearPattern("grey");
-//     p1.removeEventListener("mouseenter");
-//     p2.removeEventListener("mouseenter");
-//     p3.removeEventListener("mouseenter");
-//     p4.removeEventListener("mouseenter");
-//     p5.removeEventListener("mouseenter");
-//     p6.removeEventListener("mouseenter");
-//     p7.removeEventListener("mouseenter");
-//     p8.removeEventListener("mouseenter");
-//     p9.removeEventListener("mouseenter");
-// })
-
-overFlowGuarantee.addEventListener("mouseup", function(){
-    clearPattern("grey");
-    p1.removeEventListener("mouseenter",turnOffPattern);
-    p2.removeEventListener("mouseenter",turnOffPattern);
-    p3.removeEventListener("mouseenter",turnOffPattern);
-    p4.removeEventListener("mouseenter",turnOffPattern);
-    p5.removeEventListener("mouseenter",turnOffPattern);
-    p6.removeEventListener("mouseenter",turnOffPattern);
-    p7.removeEventListener("mouseenter",turnOffPattern);
-    p8.removeEventListener("mouseenter",turnOffPattern);
-    p9.removeEventListener("mouseenter",turnOffPattern);
-})
-
-var glowPattern = function(){
-    this.setAttribute("stroke", "white");
 }
 
-var turnOffPattern = function(){
-    this.setAttribute("stroke", "grey")
+
+//Desabilita o padrão
+function disablePattern(){
+    if(currentPW == null){
+        if(confirm("Deseja salvar esse padrão?")){
+            currentPW = passwordCode.join('-');
+        }
+    }else{
+        if(currentPW == passwordCode.join("-") && passwordCode != []){
+            alert("Senha correta!")
+        }else{
+            alert("SENHA INCORRRETA!!!")
+        }
+    }
+    p1.removeEventListener("mouseenter", glowPattern);
+    p2.removeEventListener("mouseenter", glowPattern);
+    p3.removeEventListener("mouseenter", glowPattern);
+    p4.removeEventListener("mouseenter", glowPattern);
+    p5.removeEventListener("mouseenter", glowPattern);
+    p6.removeEventListener("mouseenter", glowPattern);
+    p7.removeEventListener("mouseenter", glowPattern);
+    p8.removeEventListener("mouseenter", glowPattern);
+    p9.removeEventListener("mouseenter", glowPattern);
+    l(currentPW);
+    passwordCode = [];
+    clearPattern(defaultC);
 }
 
 //Devolve as cores anteriores por referencia
 function clearPattern(dColor){
 
-    p1.setAttribute("stroke", dColor)
-    p2.setAttribute("stroke", dColor)
-    p3.setAttribute("stroke", dColor)
-    p4.setAttribute("stroke", dColor)
-    p5.setAttribute("stroke", dColor)
-    p6.setAttribute("stroke", dColor)
-    p7.setAttribute("stroke", dColor)
-    p8.setAttribute("stroke", dColor)
-    p9.setAttribute("stroke", dColor)
+    p1.setAttribute("stroke", dColor);
+    p2.setAttribute("stroke", dColor);
+    p3.setAttribute("stroke", dColor);
+    p4.setAttribute("stroke", dColor);
+    p5.setAttribute("stroke", dColor);
+    p6.setAttribute("stroke", dColor);
+    p7.setAttribute("stroke", dColor);
+    p8.setAttribute("stroke", dColor);
+    p9.setAttribute("stroke", dColor);
 }
