@@ -1,3 +1,4 @@
+//Funções declaradas pela facilidade de uso durante o código.
 function l(v){
     return console.log(v)
 }
@@ -14,7 +15,7 @@ function id(id){
     return document.getElementById(id)
 }
 
-
+//Mapeamento de pontos
 var p1 = document.getElementById("point-1")
 var p2 = document.getElementById("point-2")
 var p3 = document.getElementById("point-3")
@@ -25,6 +26,10 @@ var p7 = document.getElementById("point-7")
 var p8 = document.getElementById("point-8")
 var p9 = document.getElementById("point-9")
 
+
+var lastSelected = null;
+
+//Definições de área, guarnição, cores e senha
 var contentArea = document.getElementById("contentArea"),
     overFlowGuarantee = document.querySelector("body"),
     defaultC = "grey",
@@ -32,19 +37,28 @@ var contentArea = document.getElementById("contentArea"),
     currentPW;
     passwordCode = [];
 
-    contentArea.addEventListener("mousedown", enablePattern)
 
 
-// contentArea.addEventListener("mouseup", disablePattern)
-
+    
+//** Optional event **/
+//contentArea.addEventListener("mouseup", disablePattern)
+  
+//Gatilhos
+contentArea.addEventListener("mousedown", enablePattern)
 overFlowGuarantee.addEventListener("mouseup", disablePattern)
 
 var glowPattern = function(){
     if(this.getAttribute("stroke") != glowC){
-    passwordCode.push(parseInt(this.getAttribute("value")));
-    l(passwordCode);
+        if (lastSelected !== null) {
+            if (isAdjacent(this, lastSelected)) {
+                drawLine(this, lastSelected);
+            }
+        }
+        passwordCode.push(parseInt(this.getAttribute("value")));
+        l(passwordCode);
     }
     this.setAttribute("stroke", glowC);
+    lastSelected = this;
 }
 
 //Habilita o padrão
@@ -60,19 +74,21 @@ function enablePattern(){
     p9.addEventListener("mouseenter", glowPattern)
 }
 
-
 //Desabilita o padrão
 function disablePattern(){
-    if(currentPW == null){
-        if(confirm("Deseja salvar esse padrão?")){
-            currentPW = passwordCode.join('-');
-        }
-    }else{
-        if(currentPW == passwordCode.join("-") && passwordCode != []){
-            alert("Senha correta!")
+    l(passwordCode)
+    if(currentPW == null && passwordCode.length > 1){
+            if(confirm("Deseja salvar esse padrão?")){
+                currentPW = passwordCode.join('-');
+            }
         }else{
-            alert("SENHA INCORRRETA!!!")
-        }
+            if(passwordCode.length > 1){
+                if(currentPW == passwordCode.join("-") && passwordCode != []){
+                    alert("Senha correta!")
+                }else{
+                    alert("SENHA INCORRRETA!!!")
+                }
+            }
     }
     p1.removeEventListener("mouseenter", glowPattern);
     p2.removeEventListener("mouseenter", glowPattern);
@@ -86,6 +102,7 @@ function disablePattern(){
     l(currentPW);
     passwordCode = [];
     clearPattern(defaultC);
+    clearLines();
 }
 
 //Devolve as cores anteriores por referencia
